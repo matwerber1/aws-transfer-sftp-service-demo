@@ -58,3 +58,7 @@ After creation, the SFTP service need several minutes before it is ready.
   ```sh
   ./deploy.sh
   ```
+  
+7. Your new SFTP service, admin user, S3 bucket, and supporting IAM resources are deployed. Check the status of your SFTP service in the AWS Transfer console and when ready, use your favorite SFTP client to connect to the SFTP service endpoint. 
+
+
