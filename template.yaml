@@ -1,0 +1,126 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Demo of AWS Transfer for SFTP
+
+Resources:
+  TransferBucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+     PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+        
+  TransferLogRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - transfer.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: logs
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:*'
+                Resource: 'arn:aws:logs:*:*:*'
+
+  TransferUserRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - transfer.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: S3FullAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              -
+                Effect: Allow
+                Action:
+                  - 's3:ListAllMyBuckets'
+                  - 's3:GetBucketLocation'
+                Resource:
+                  - "*"
+              - 
+                Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                Resource: 
+                  - !GetAtt TransferBucket.Arn
+              - 
+                Effect: Allow
+                Action:
+                  - 's3:PutObject'
+                  - 's3:GetObject'
+                  - 's3:DeleteObject'
+                Resource: 
+                  - !Sub "${TransferBucket.Arn}/*"
+
+  TransferScopeDownPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties: 
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - 
+          Sid: ListHomeDir
+          Effect: Allow
+          Action: s3:ListBucket
+          Resource: arn:aws:s3:::${transfer:HomeBucket}
+        - 
+          Sid: AWSTransferRequirements
+          Effect: Allow
+          Action:
+          - s3:ListAllMyBuckets
+          - s3:GetBucketLocation
+          Resource: "*"
+        - 
+          Sid: HomeDirObjectAccess
+          Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:DeleteObjectVersion
+          - s3:DeleteObject
+          - s3:GetObjectVersion
+          Resource: arn:aws:s3:::${transfer:HomeDirectory}*
+
+Outputs:
+  TransferUserRoleArn:
+    Description: IAM role ARN granting users full SFTP access S3 transfer bucket.
+    Value: !GetAtt TransferUserRole.Arn
+  
+  TransferUserRoleName:
+    Description: IAM role name granting users full SFTP access S3 transfer bucket.
+    Value: !Ref TransferUserRole
+    
+  TransferUserScopedownPolicyName:
+    Description: Optional IAM policy to scope SFTP user's access down to only their home directory. 
+    Value: !Ref TransferScopeDownPolicy
+  
+  TransferBucketArn:
+    Description: ARN of the S3 Bucket that acts as the storage back-end for the AWS  Transfer for SFTP service. 
+    Value: !GetAtt TransferBucket.Arn
+  
+  TransferLogRoleArn:
+    Description: ARN of the IAM role that the Transfer for SFTP service assumes to log results to CloudWatch Logs. 
+    Value: !GetAtt TransferLogRole.Arn
