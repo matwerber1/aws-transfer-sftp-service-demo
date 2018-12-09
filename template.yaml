@@ -120,6 +120,10 @@ Outputs:
   TransferBucketArn:
     Description: ARN of the S3 Bucket that acts as the storage back-end for the AWS  Transfer for SFTP service. 
     Value: !GetAtt TransferBucket.Arn
+
+  TransferBucketName:
+    Description: Name of the S3 Bucket that acts as the storage back-end for the AWS  Transfer for SFTP service. 
+    Value: !Ref TransferBucket
   
   TransferLogRoleArn:
     Description: ARN of the IAM role that the Transfer for SFTP service assumes to log results to CloudWatch Logs. 

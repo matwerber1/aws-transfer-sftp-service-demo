@@ -71,6 +71,7 @@ SERVER_ID=$(echo $SERVER_ARN | cut -d'/' -f 2)
 SFTP_ENDPOINT=$SERVER_ID.server.transfer.$REGION.amazonaws.com
 
 TRANSFER_BUCKET_ARN=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].Outputs[?OutputKey==`TransferBucketArn`].OutputValue' --output text)
+TRANSFER_BUCKET_NAME=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].Outputs[?OutputKey==`TransferBucketName`].OutputValue' --output text)
 
 echo "S3 Transfer Bucket = $TRANSFER_BUCKET_ARN"
 echo "SFTP Endpoint = $SFTP_ENDPOINT"
@@ -89,8 +90,8 @@ else
     --ssh-public-key-body "$FTP_ADMIN_PUBLICKEY" \
     --tags Key=Role,Value=Administrator \
     --user-name $FTP_ADMIN_USERNAME \
-    --home-directory '/home/$FTP_ADMIN_USERNAME' \
-    >/dev/null 2>&1
+    --home-directory "/$TRANSFER_BUCKET_NAME/home/$FTP_ADMIN_USERNAME" \
+
   if [ $? -eq 0 ]; then
     echo "User created successfully!"
   fi
