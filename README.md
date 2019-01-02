@@ -44,6 +44,13 @@ After creation, the SFTP service need several minutes before it is ready.
   ```sh
   FTP_ADMIN_PUBLICKEY="YOUR_PUBLIC_KEY"
   ```
+  
+  As an example, the line above should look something like this: 
+  
+  ```sh
+  FTP_ADMIN_PUBLICKEY="ssh-rsa AAAAB3NzaC1yc2EAAAADSDFISDOISDSDOKFSDFHOSDFOISHDFOUIeKhS9SsLtNYSL1DALxLml3XUJpd3xaY1231232prh264kCOtCvaQKV/CTDKb0JoyT4N93Hs4yquwfaqLZ+xK56hBi763kxkbAfB85rW57xg4XD3wLrwLVHhF5X+SFHe4x1oD4vjqofprhKPr/lMx+ModaaZ7qmv8S3EHawYes8oQxQk52s/I3Heaj4gh+puXTNNgN3zeQUaW2yW3w7dhbrt8L2ZuPL0iVNj4l4y8A+9kavCfLdxGVMg7M/IQtjwGDc8pb+LAGFEIDmSQeNOUse/bGHD77c2hRzLSjTwOloRhL1DF2EV2h matw@XXX-2342323"
+
+  ```
 
 5. OPTIONAL - edit the CloudFormation stack name, SFTP service name, or admin user name: 
 
