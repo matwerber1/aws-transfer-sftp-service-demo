@@ -39,7 +39,7 @@ After creation, the SFTP service need several minutes before it is ready.
   BUCKET_NAME=_YOUR_S3_BUCKET
   ```
 
-4. Within ./deploy.sh, replace YOUR_PUBLIC_KEY with the public key you wish to use for your FTP admin user. Keep the double-quotes around your key to prevent parsing errors. 
+4. Within ./deploy.sh, replace YOUR_PUBLIC_KEY with the public key you wish to use for your FTP admin user. Keep the double-quotes around your key to prevent parsing errors. For instructions on generating SSH keys, [see this guide](https://docs.aws.amazon.com/transfer/latest/userguide/sshkeygen.html). 
 
   ```sh
   FTP_ADMIN_PUBLICKEY="YOUR_PUBLIC_KEY"
