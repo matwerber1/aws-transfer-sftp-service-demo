@@ -1,3 +1,9 @@
+# UPDATE - CloudFormation Support (May 2019)!
+
+This project was created shortly after Amazon Transfer for SFTP launched and made use of shell scripts to deploy SFTP-specific resources since the service was not supported by CloudFormation at launch. 
+
+New, **as of May 24, 2019**, the service now has CloudFormation support. I haven't tested it, but it likely means this project can be simplified. Pull requests welcome :)
+
 # aws-sftp-service-demo
 
 This project is a demo deployment of an AWS Transfer for SFTP fully-managed SFTP server with backend storage in S3.
